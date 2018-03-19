@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 
 /**
  * 
- * @author Alison Almeida RA 818119557 SI
+ * @author Mauro de Melo Pires - 816125689 - SIN3AN-MCA1
  *
  */
 public class Usuario implements Serializable{

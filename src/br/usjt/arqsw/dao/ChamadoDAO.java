@@ -16,7 +16,7 @@ import br.usjt.arqsw.entity.Chamado;
 import br.usjt.arqsw.entity.Fila;
 /**
  * 
- * @author Alison Almeida RA 818119557 SI
+ * @author Mauro de Melo Pires - 816125689 - SIN3AN-MCA1
  *
  */
 @Repository
@@ -41,8 +41,6 @@ public class ChamadoDAO {
 	}
 	public ArrayList<Chamado> listarChamados(Fila fila) throws IOException {
 		String query = "select c.id_chamado,c.descricao,c.status,dt_abertura,dt_fechamento from chamado c where c.id_fila="+fila.getId();
-		//String query = "select c.id_chamado,c.descricao,c.status,date_format(c.dt_abertura, '%d/%m/%Y') as dt_abertura,date_format(c.dt_fechamento, '%d/%m/%Y') as dt_fechamento from chamado c where c.id_fila="+fila.getId();
-		System.out.println(query);
 		ArrayList<Chamado> lista = new ArrayList<>();
 		try(PreparedStatement pst = conn.prepareStatement(query);
 			ResultSet rs = pst.executeQuery();){
@@ -55,8 +53,6 @@ public class ChamadoDAO {
 				chamado.setStatus(rs.getString("status"));
 				chamado.setDt_abertura(rs.getDate("dt_abertura"));
 				chamado.setDt_fechamento(rs.getDate("dt_fechamento"));
-				//filac.setNome(rs.getString("nm_fila"));
-				//filac.setId(rs.getInt("id_fila"));
 				chamado.setFila(filac);
 				lista.add(chamado);
 			}

@@ -17,7 +17,7 @@ import br.usjt.arqsw.service.ChamadoService;
 import br.usjt.arqsw.service.FilaService;
 /**
  * 
- * @author Alison Almeida RA 818119557 SI
+ * @author Mauro de Melo Pires - 816125689 - SIN3AN-MCA1
  *
  */
 @Controller
