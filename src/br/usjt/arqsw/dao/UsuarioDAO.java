@@ -1,47 +1,42 @@
 package br.usjt.arqsw.dao;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import br.usjt.arqsw.entity.Usuario;
 
 @Repository
 public class UsuarioDAO {
-private Connection conn;
-	
-	@Autowired
-	public UsuarioDAO(DataSource dataSource) throws IOException{
-		try{
-			this.conn = dataSource.getConnection(); 
-			} 
-		catch (SQLException e)
-		{ 
-			throw new IOException(e); 
-		} 
+	@PersistenceContext
+	EntityManager manager;
+
+	@SuppressWarnings("unchecked")
+	public List<Usuario> listarUsuarios(){
+		return manager.createQuery("select u from Usuario u").getResultList();
 	}
+	public Usuario logarUsuario(Usuario usuario) {
+		System.out.println("select u.username from Usuario u where u.username='"+usuario.getUsername()+"' and u.password ='"+usuario.getPassword()+"';");
+		return (Usuario)manager.createQuery("select u from Usuario u where u.username='"+usuario.getUsername()+"' and u.password ='"+usuario.getPassword()+"'").getSingleResult();
 	
-	public boolean logarUsuario(Usuario usuario) throws IOException {
-		String query = "select * from usuario u where u.username ='"+usuario.getUsername()+"' and u.password ='"+usuario.getPassword()+"';";
-		System.out.println(query);
-		try(PreparedStatement pst = conn.prepareStatement(query);
-			ResultSet rs = pst.executeQuery();){
-			if(rs.next()) {
-				return true;
-			}
-			else {
-				return false;
-			}
-			
-		} catch (SQLException e) {
-			throw new IOException(e);
-		}
+	}
+
+	public void atualizar(Usuario usuario) {
+		manager.merge(usuario);
+	}
+
+	public void remover(Usuario usuario) {
+		manager.remove(usuario);
+	}
+
+	public Usuario selecionar(int id) {
+		return manager.find(Usuario.class, id);
+	}
+
+	public void cadastrarChamado(Usuario usuario){
+		manager.persist(usuario);
 	}
 }

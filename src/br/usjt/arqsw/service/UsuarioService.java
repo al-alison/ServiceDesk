@@ -17,7 +17,7 @@ private UsuarioDAO dao;
 		this.dao = dao;
 	}
 	
-	public boolean logarUsuario(Usuario usuario) throws IOException{
+	public Usuario logarUsuario(Usuario usuario) throws IOException{
 		return dao.logarUsuario(usuario);
 	}
 }

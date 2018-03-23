@@ -1,8 +1,10 @@
 package br.usjt.arqsw.controller;
+import java.util.Date;
 
 import java.io.IOException;
 import java.util.List;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import br.usjt.arqsw.service.ChamadoService;
 import br.usjt.arqsw.service.FilaService;
 /**
  * 
- * @author Mauro de Melo Pires - 816125689 - SIN3AN-MCA1
+ * @author Alison Almeida -818119557 - SIN3AN-MCA1
  *
  */
 @Controller
@@ -45,15 +47,24 @@ public class ManterChamadosController {
 		return "TelaPrincipal";
 	}
 	
+	@Transactional
 	private List<Fila> listarFilas() throws IOException{
 			return filaService.listarFilas();
 	}
+	@Transactional
+
 	private List<Chamado> listarChamados(Fila fila) throws IOException{
 		return chamadoService.listarChamados(fila);
 	}
-	
-	private int cadastrarChamado(String desc, Fila fila) throws IOException{
-		return chamadoService.cadastrarChamado(desc, fila.getId());
+	@Transactional
+	private void cadastrarChamado(String desc, Fila fila) throws IOException{
+		Chamado c = new Chamado();
+		Date d = new Date();
+		c.setDescricao(desc);
+		c.setFila(fila);
+		c.setStatus("aberto");
+		c.setDt_abertura(d);
+		chamadoService.cadastrarChamado(c);
 	}
 	
 	/**
@@ -61,6 +72,7 @@ public class ManterChamadosController {
 	 * @param model Acesso à request http
 	 * @return JSP de Listar Chamados
 	 */
+	@Transactional
 	@RequestMapping("/listar_filas_exibir")
 	public String listarFilasExibir(Model model) {
 		try {
@@ -76,6 +88,7 @@ public class ManterChamadosController {
 	 * @param model lista as filas para cadastro do chamado
 	 * @return JSP de cadastro
 	 */
+	@Transactional
 	@RequestMapping("/cadastrar_chamado")
 	public String cadastrarChamado(Model model) {
 		try {
@@ -92,14 +105,12 @@ public class ManterChamadosController {
 	 * @param fila do chamado a ser cadastrado
 	 * @return JSP para informar o cadastro
 	 */
+	@Transactional
 	@RequestMapping("/chamado_cadastrado")
 	public String chamadoCadastrado(String desc, Fila fila) {
 		try {
-			if(cadastrarChamado(desc, fila)==1) {
-				return "ChamadoCadastrado";		
-			}	
-			else
-				return "Erro";
+			cadastrarChamado(desc, fila);
+			return "ChamadoCadastrado";		
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "Erro";
@@ -112,6 +123,7 @@ public class ManterChamadosController {
 	 * @param model parametros
 	 * @return JSP de chamados
 	 */
+	@Transactional
 	@RequestMapping("/listar_chamados_exibir")
 	public String listarChamadosExibir(@Valid Fila fila, BindingResult result, Model model) {
 		try {

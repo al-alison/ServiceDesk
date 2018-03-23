@@ -3,33 +3,51 @@ package br.usjt.arqsw.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 /**
  * 
- * @author Mauro de Melo Pires - 816125689 - SIN3AN-MCA1
+ * @author Alison Almeida -818119557 - SIN3AN-MCA1
  *
  */
+@Entity
+@Table
 public class Chamado implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@NotNull(message="O Chamado não pode ser vazio")
-	@Min(value=1, message="O Chamado não pode ser vazio")
+	//@NotNull(message="O Chamado não pode ser vazio")
+	//@Min(value=1, message="O Chamado não pode ser vazio")
+	@Column(name="id_chamado")
+	@Id
+	@GeneratedValue
 	private int id;
 	
 	@NotNull(message="A descri�ão não pode ser vazia")
 	@Size(min=5, max=100, message="A descri��o deve estar entre 5 e 100 caracteres.")
+	@Column
 	private String descricao;
 	@NotNull
+	@Column
 	private String status;
 	@NotNull
+	@Column
 	private Date dt_abertura;
+	@Column
 	private Date dt_fechamento;
 	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "id_fila")
 	private Fila fila;
 	
 	public int getId() {
