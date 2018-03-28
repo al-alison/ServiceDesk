@@ -10,9 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * 
  * @author Alison Almeida -818119557 - SIN3AN-MCA1
@@ -42,8 +43,10 @@ public class Chamado implements Serializable {
 	private String status;
 	@NotNull
 	@Column
+	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date dt_abertura;
 	@Column
+	@JsonFormat(pattern="dd-MM-yyyy")
 	private Date dt_fechamento;
 	@NotNull
 	@ManyToOne

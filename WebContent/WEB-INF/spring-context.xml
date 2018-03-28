@@ -38,7 +38,7 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	<tx:annotation-driven/>
-   <mvc:interceptors>
+   <!--  <mvc:interceptors>
 		<bean class="br.usjt.arqsw.interceptor.AutorizadorInterceptor" />
-	</mvc:interceptors>
+	</mvc:interceptors>-->
 </beans>

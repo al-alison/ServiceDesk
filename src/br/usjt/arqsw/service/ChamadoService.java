@@ -28,9 +28,25 @@ public class ChamadoService {
 	public List<Chamado> listarChamados(Fila fila) throws IOException{
 		return dao.listarChamados(fila);
 	}
+	
+	@Transactional
+	public List<Chamado> listarChamados() throws IOException{
+		return dao.listarChamados();
+	}
+	
 	@Transactional
 	public void cadastrarChamado(Chamado chamado) throws IOException{
 		dao.cadastrarChamado(chamado);
+	}
+	
+	@Transactional
+	public void fecharChamado(Chamado chamado) throws IOException{
+		dao.atualizar(chamado);
+	}
+	
+	@Transactional
+	public Chamado mostrar(Chamado chamado) throws IOException{
+		return dao.selecionar(chamado.getId());
 	}
 
 }
