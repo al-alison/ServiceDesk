@@ -1,4 +1,5 @@
 package br.usjt.arqsw.controller;
+import java.util.ArrayList;
 import java.util.Date;
 
 import java.io.IOException;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.usjt.arqsw.entity.Chamado;
 import br.usjt.arqsw.entity.Fila;
@@ -56,6 +59,17 @@ public class ManterChamadosController {
 	private List<Chamado> listarChamados(Fila fila) throws IOException{
 		return chamadoService.listarChamados(fila);
 	}
+	
+	@Transactional
+	private List<Chamado> listarChamadosAbertos(Fila fila) throws IOException{
+		return chamadoService.listarChamadosAbertos(fila);
+	}
+	
+	@Transactional
+	private Chamado carregar(int id) throws IOException{
+		return chamadoService.listarChamado(id);
+	}
+	
 	@Transactional
 	private void cadastrarChamado(String desc, Fila fila) throws IOException{
 		Chamado c = new Chamado();
@@ -65,6 +79,14 @@ public class ManterChamadosController {
 		c.setStatus("aberto");
 		c.setDt_abertura(d);
 		chamadoService.cadastrarChamado(c);
+	}
+	
+	@Transactional
+	private void fecharChamado(Chamado c) throws IOException{
+		Date d = new Date();
+		c.setDt_fechamento(d);
+		c.setStatus("fechado");
+		chamadoService.fecharChamado(c);
 	}
 	
 	/**
@@ -78,6 +100,18 @@ public class ManterChamadosController {
 		try {
 			model.addAttribute("filas", listarFilas());
 			return "ChamadoListar";
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "Erro";
+		}
+	}
+	
+	@Transactional
+	@RequestMapping("/listar_filas_exibir_fechamento")
+	public String listarFilasExibirFechamento(Model model) {
+		try {
+			model.addAttribute("filas", listarFilas());
+			return "ChamadoListarFechamento";
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "Erro";
@@ -116,6 +150,24 @@ public class ManterChamadosController {
 			return "Erro";
 		}
 	}
+	
+	@Transactional
+	@RequestMapping("/fechar_chamados")
+	public String fecharChamado(int[] selected) {
+		System.out.println(selected);
+		for (int i = 0; i<selected.length; i++) {
+			try {
+				Chamado c = carregar(selected[i]);
+				System.out.println(selected[i]);
+				fecharChamado(c);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return "ChamadoCadastrado";
+	}
+	
 	/**
 	 * 
 	 * @param fila lista de filas
@@ -137,6 +189,27 @@ public class ManterChamadosController {
 			model.addAttribute("chamados", listarChamados(fila));
 			
 			return "ChamadoListarExibir";
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "Erro";
+		}
+	}
+	
+	@Transactional
+	@RequestMapping("/listar_chamados_exibir_fechamento")
+	public String listarChamadosExibirFechamento(@Valid Fila fila, BindingResult result, Model model) {
+		try {
+			if (result.hasFieldErrors("id")) {
+				model.addAttribute("filas", listarFilas());
+				System.out.println("Deu erro " + result.toString());
+				return "ChamadoListar";
+				//return "redirect:listar_filas_exibir";
+			}
+			fila = filaService.carregar(fila.getId());
+			model.addAttribute("chamados", listarChamadosAbertos(fila));
+			
+			return "ChamadoListarExibirFechamento";
 
 		} catch (IOException e) {
 			e.printStackTrace();

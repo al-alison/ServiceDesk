@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Chamado</title>
+    <title>Fila</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -18,8 +18,8 @@
 		<c:import url="Menu.jsp"/>
         <!-- Container Principal -->
         <div id="main" class="container">
-            <h3 class="page-header">Operação realizada com sucesso</h3>
-            <h5><a href="tela_inicio">Retornar para tela principal</a></h5>
+            <h3 class="page-header">Operação realizada com sucesso!</h3>
+            <h5><a href="listar_filas_crud">Retornar para lista de filas</a></h5>
         </div>
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

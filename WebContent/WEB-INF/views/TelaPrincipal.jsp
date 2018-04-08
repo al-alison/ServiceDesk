@@ -21,7 +21,6 @@
     	<br><br>
         <div class="jumbotron">
             <h1> Sistema de Chamados </h1>
-            <h2><a href="cadastrar_chamado">Cadastrar chamado</a></h2>
             <p>Arquitetura de Software</p>
             <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span> USJT - 2018
         </div>

@@ -31,6 +31,11 @@ public class ChamadoDAO {
 		return manager.createQuery("select c from Chamado c where id_fila ="+fila.getId()).getResultList();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Chamado> listarChamadosAbertos(Fila fila){
+		return manager.createQuery("select c from Chamado c where status = 'aberto' and id_fila ="+fila.getId()).getResultList();
+	}
+	
 	public void atualizar(Chamado chamado) {
 		manager.merge(chamado);
 	}

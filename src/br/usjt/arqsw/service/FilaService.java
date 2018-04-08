@@ -3,10 +3,13 @@ package br.usjt.arqsw.service;
 import java.io.IOException;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.usjt.arqsw.dao.FilaDAO;
+import br.usjt.arqsw.entity.Chamado;
 import br.usjt.arqsw.entity.Fila;
 /**
  * 
@@ -26,5 +29,17 @@ public class FilaService {
 	}
 	public Fila carregar(int id) throws IOException{
 		return dao.selecionar(id);
+	}
+	@Transactional
+	public void cadastrarFila(Fila fila) throws IOException{
+		dao.cadastrarChamado(fila);
+	}
+	@Transactional
+	public void atualizarFila(Fila fila) throws IOException{
+		dao.atualizar(fila);
+	}
+	@Transactional
+	public void remover(Fila fila) throws IOException{
+		dao.remover(fila);
 	}
 }

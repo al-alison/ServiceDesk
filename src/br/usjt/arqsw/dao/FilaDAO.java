@@ -28,7 +28,7 @@ public class FilaDAO {
 	}
 
 	public void remover(Fila fila) {
-		manager.remove(fila);
+		manager.createQuery("delete from Fila where id_fila = "+fila.getId()).executeUpdate();
 	}
 
 	public Fila selecionar(int id) {

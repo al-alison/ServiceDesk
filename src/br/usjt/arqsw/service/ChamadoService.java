@@ -24,6 +24,12 @@ public class ChamadoService {
 	public ChamadoService(ChamadoDAO dao){
 		this.dao = dao;
 	}
+	
+	@Transactional
+	public Chamado listarChamado(int id) throws IOException{
+		return dao.selecionar(id);
+	}
+	
 	@Transactional
 	public List<Chamado> listarChamados(Fila fila) throws IOException{
 		return dao.listarChamados(fila);
@@ -32,6 +38,11 @@ public class ChamadoService {
 	@Transactional
 	public List<Chamado> listarChamados() throws IOException{
 		return dao.listarChamados();
+	}
+	
+	@Transactional
+	public List<Chamado> listarChamadosAbertos(Fila fila) throws IOException{
+		return dao.listarChamadosAbertos(fila);
 	}
 	
 	@Transactional
