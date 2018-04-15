@@ -35,6 +35,17 @@
                         </c:forEach>
                     </select>
                     <br>
+                     <label for="fila">Escolha o Cliente:</label>
+					<form:errors path="cliente.id" cssStyle="color:red"/>
+                    <select class="form-control" name="idcliente">
+                        <option value="0"></option>
+                        <c:forEach var="cliente" items="${clientes}" varStatus="myIndex">
+                            <option value="${cliente.id}">${cliente.first_name} ${cliente.last_name}</option>
+                        </c:forEach>
+                    </select>
+                    <img alt="?" src="${clientes[myIndex.index].avatar}" height="48" width="48" class="img-circle">
+                    
+                    <br>
                     <label for="desc">Descrição do chamado:</label>
                     <input type="text" name="desc" class="form-control" id="desc">
                 </div>

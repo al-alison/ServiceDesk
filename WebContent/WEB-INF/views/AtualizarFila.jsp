@@ -23,15 +23,15 @@
     <!-- Container Principal -->
     <div id="main" class="container">
         <h3 class="page-header">Atualizar Fila</h3>
-        <form action="atualizar_fila" method="post">
+        <form action="atualizar_fila" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-group col-md-4">
 					<input type="hidden" name="id" class="form-control" id="id" value ="${fila.id}">
                     <label for="nome">Nome da fila:</label>
                     <input type="text" name="nome" class="form-control" id="nome" value ="${fila.nome}">
-                    <br>
-                    <label for="img">Imagem:</label>
-                    <input type="text" name="imagem" class="form-control" id="imagem" value ="${fila.imagem}">
+                    <br>    
+                    <label for="arquivo">Imagem:</label>
+                    <input type="file" name="file" id="arquivo" class="file" value ="${fila.imagem}">
                 </div>
             </div>
             <div id="actions" class="row">

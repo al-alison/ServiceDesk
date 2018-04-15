@@ -30,27 +30,31 @@
 						<h1>Filas</h1>
 						<table class="table table-condensed" border="1">
 							<TR>
-								<td>Alterar</td>
-								<td>Excluir</td>
+								<td>Mostrar</td>
 								<td>Nome</td>
 								<td>Imagem</td>
+								<td>Alterar</td>
+								<td>Excluir</td>
 							</tr>
 							<c:forEach var="fila" items="${filas}">
 								<tr style="font-size: 10">
+									<td class="actions"><a class="btn btn-success"
+										href="mostrar_fila?id=${fila.id }">Exibir</a></td>
+									<td>${fila.nome}</td>
+									<td><img alt="?" src="img/${fila.imagem}" height="48"
+										width="48" class="img-circle"></td>
 									<td>
-										<form action="tela_atualizar_fila">
+										<form action="tela_atualizar_fila" method=post>
 											<button type="submit" class="btn btn-primary"
 												name="btnAlterar" value="${fila.id}">Alterar</button>
 										</form>
 									</td>
 									<td>
-									<form action="deletar_fila">
-										<button type ="submit" class="btn btn-primary" name="btnExcluir"
-											value="${fila.id}">Excluir</button>
-									</form>
+										<form action="deletar_fila" method=post>
+											<button type="submit" class="btn btn-danger"
+												name="btnExcluir" value="${fila.id}">Excluir</button>
+										</form>
 									</td>
-									<td>${fila.nome}</td>
-									<td>${fila.imagem}</td>
 								</tr>
 							</c:forEach>
 						</table>

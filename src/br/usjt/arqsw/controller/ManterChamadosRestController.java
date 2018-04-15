@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +31,8 @@ public class ManterChamadosRestController {
 		this.fs = filaService;
 		this.cs = chamadoService;
 	}
-
-	@RequestMapping(method = RequestMethod.GET, value = "rest/chamados/")
+	@CrossOrigin(origins = "*")
+	@RequestMapping(method = RequestMethod.GET, value = "rest/chamados")
 	public @ResponseBody List<Chamado> listagem() {
 		List<Chamado> lista = null;
 		try {
@@ -41,7 +42,8 @@ public class ManterChamadosRestController {
 		}
 		return lista;
 	}
-
+	
+	@CrossOrigin(origins = "*")
 	@RequestMapping(method = RequestMethod.GET, value = "rest/chamados/idFila={idFila}")
 	public @ResponseBody List<Chamado> listagemFila(@PathVariable("idFila") Long id) {
 		Fila param;
@@ -59,7 +61,7 @@ public class ManterChamadosRestController {
 		}
 		return lista;
 	}
-
+	@CrossOrigin(origins = "*")
 	@RequestMapping(method = RequestMethod.GET, value = "rest/chamados/{id}")
 	public @ResponseBody Chamado listaChamado(@PathVariable("id") Long id) {
 		Chamado chamado = null, param;
@@ -73,6 +75,7 @@ public class ManterChamadosRestController {
 		return chamado;
 	}
 
+	@CrossOrigin(origins = "*")
 	@Transactional
 	@RequestMapping(method = RequestMethod.POST, value = "rest/chamados")
 	public ResponseEntity<Chamado> criarChamado(@RequestBody Chamado chamado) {
@@ -84,7 +87,7 @@ public class ManterChamadosRestController {
 			return new ResponseEntity<Chamado>(chamado, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	@CrossOrigin(origins = "*")
 	@Transactional
 	@RequestMapping(method = RequestMethod.PUT, value = "rest/chamados")
 	public ResponseEntity<Chamado> fecharChamado(@RequestBody Chamado chamado) {

@@ -36,8 +36,10 @@
 									<td>Status</td>
 									<td>Data de abertura</td>
 									<td>Data de fechamento</td>
+									<td>Nome do cliente</td>
+                    				<td>Avatar</td>
 								</tr>
-								<c:forEach var="chamado" items="${chamados}">
+								<c:forEach var="chamado" items="${chamados}" varStatus="myIndex">
 									<tr style="font-size: 10">
 										<td><input type="checkbox" name="selected"
 											value="${chamado.id}" id="selected"></td>
@@ -45,6 +47,8 @@
 										<td>${chamado.status}</td>
 										<td>${chamado.dt_abertura}</td>
 										<td>${chamado.dt_fechamento}</td>
+										<td>${clientes[myIndex.index].first_name} ${clientes[myIndex.index].last_name}</td>
+                						<td><img alt="?" src="${clientes[myIndex.index].avatar}" height="48" width="48" class="img-circle"></td>
 									</tr>
 								</c:forEach>
 							</table>
@@ -57,7 +61,6 @@
 						</form>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>

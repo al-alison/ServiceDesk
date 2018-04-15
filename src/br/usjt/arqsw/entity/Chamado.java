@@ -11,9 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import br.usjt.arqsw.reqres.Cliente;
 /**
  * 
  * @author Alison Almeida -818119557 - SIN3AN-MCA1
@@ -53,6 +56,28 @@ public class Chamado implements Serializable {
 	@JoinColumn(name = "id_fila")
 	private Fila fila;
 	
+	@Column(name="id_rh")
+	private int id_rh;
+	
+	public int getId_rh() {
+		return id_rh;
+	}
+	public void setId_rh(int id_rh) {
+		this.id_rh = id_rh;
+	}
+	/*private Cliente cliente;
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+
+	}*/
+
 	public int getId() {
 		return id;
 	}

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.usjt.arqsw.entity.Chamado;
 import br.usjt.arqsw.entity.Fila;
+import br.usjt.arqsw.reqres.Cliente;
 import br.usjt.arqsw.service.ChamadoService;
 import br.usjt.arqsw.service.FilaService;
 /**
@@ -60,6 +61,10 @@ public class ManterChamadosController {
 		return chamadoService.listarChamados(fila);
 	}
 	
+	private List<Cliente> listarClientes(){
+		return chamadoService.retornaClientes();
+	}
+	
 	@Transactional
 	private List<Chamado> listarChamadosAbertos(Fila fila) throws IOException{
 		return chamadoService.listarChamadosAbertos(fila);
@@ -71,13 +76,14 @@ public class ManterChamadosController {
 	}
 	
 	@Transactional
-	private void cadastrarChamado(String desc, Fila fila) throws IOException{
+	private void cadastrarChamado(String desc, Fila fila, int id) throws IOException{
 		Chamado c = new Chamado();
 		Date d = new Date();
 		c.setDescricao(desc);
 		c.setFila(fila);
 		c.setStatus("aberto");
 		c.setDt_abertura(d);
+		c.setId_rh(id);
 		chamadoService.cadastrarChamado(c);
 	}
 	
@@ -89,6 +95,9 @@ public class ManterChamadosController {
 		chamadoService.fecharChamado(c);
 	}
 	
+	private Cliente buscarCliente(int id) {
+		return chamadoService.retornaCliente(id);
+	}
 	/**
 	 * 
 	 * @param model Acesso à request http
@@ -111,6 +120,7 @@ public class ManterChamadosController {
 	public String listarFilasExibirFechamento(Model model) {
 		try {
 			model.addAttribute("filas", listarFilas());
+
 			return "ChamadoListarFechamento";
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -127,6 +137,7 @@ public class ManterChamadosController {
 	public String cadastrarChamado(Model model) {
 		try {
 			model.addAttribute("filas", listarFilas());
+			model.addAttribute("clientes",listarClientes());
 			return "CadastrarChamado";
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -141,9 +152,9 @@ public class ManterChamadosController {
 	 */
 	@Transactional
 	@RequestMapping("/chamado_cadastrado")
-	public String chamadoCadastrado(String desc, Fila fila) {
+	public String chamadoCadastrado(String desc, Fila fila, Cliente cliente) {
 		try {
-			cadastrarChamado(desc, fila);
+			cadastrarChamado(desc, fila, cliente.getId());
 			return "ChamadoCadastrado";		
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -186,8 +197,14 @@ public class ManterChamadosController {
 				//return "redirect:listar_filas_exibir";
 			}
 			fila = filaService.carregar(fila.getId());
-			model.addAttribute("chamados", listarChamados(fila));
-			
+			List<Chamado> chamado = listarChamados(fila);
+			model.addAttribute("chamados", chamado);
+			List<Cliente> cliente = new ArrayList<Cliente>();
+			for(int i = 0; i<chamado.size(); i++) {
+				cliente.add(buscarCliente(chamado.get(i).getId_rh()));
+				System.out.println(cliente.get(i).getFirst_name().toString());
+			}
+			model.addAttribute("clientes", cliente);
 			return "ChamadoListarExibir";
 
 		} catch (IOException e) {
@@ -202,12 +219,20 @@ public class ManterChamadosController {
 		try {
 			if (result.hasFieldErrors("id")) {
 				model.addAttribute("filas", listarFilas());
+				//model.addAttribute("cliente", buscarCliente());
 				System.out.println("Deu erro " + result.toString());
 				return "ChamadoListar";
 				//return "redirect:listar_filas_exibir";
 			}
 			fila = filaService.carregar(fila.getId());
-			model.addAttribute("chamados", listarChamadosAbertos(fila));
+			List<Chamado> chamado = listarChamadosAbertos(fila);
+			model.addAttribute("chamados", chamado);
+			List<Cliente> cliente = new ArrayList<Cliente>();
+			for(int i = 0; i<chamado.size(); i++) {
+				cliente.add(buscarCliente(chamado.get(i).getId_rh()));
+				System.out.println(cliente.get(i).getFirst_name().toString());
+			}
+			model.addAttribute("clientes", cliente);
 			
 			return "ChamadoListarExibirFechamento";
 

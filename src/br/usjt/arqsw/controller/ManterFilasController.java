@@ -1,11 +1,9 @@
 package br.usjt.arqsw.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -13,13 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import br.usjt.arqsw.entity.Chamado;
 import br.usjt.arqsw.entity.Fila;
-import br.usjt.arqsw.service.ChamadoService;
 import br.usjt.arqsw.service.FilaService;
 
 /**
@@ -29,6 +26,8 @@ import br.usjt.arqsw.service.FilaService;
  */
 @Controller
 public class ManterFilasController {
+	@Autowired
+	private ServletContext servletContext;
 	private FilaService filaService;
 
 	@Autowired
@@ -52,18 +51,16 @@ public class ManterFilasController {
 	}
 	
 	@Transactional
-	private void deletar(Fila fila) throws IOException {
+	private void deletar(Fila fila) throws Exception {
 		filaService.remover(fila);
 	}
 
 	@Transactional
-	@RequestMapping("/cadastrar_fila")
-	public String cadastrarFila(String nome, String imagem) {
+	@RequestMapping(value = "/cadastrar_fila", method = RequestMethod.POST)
+	public String cadastrarFila(@Valid Fila fila, BindingResult result,Model model, @RequestParam("file") MultipartFile file) {
 		try {
-			Fila f = new Fila();
-			f.setNome(nome);
-			f.setImagem(imagem);
-			cadastrarFila(f);
+			filaService.cadastrarFila(fila);
+			filaService.gravarImagem(servletContext, fila, file);
 			return "FilaCadastrada";
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -77,8 +74,6 @@ public class ManterFilasController {
 		return "CadastrarFila";
 	}
 
-	@Transactional
-	@RequestMapping("/atualizar_fila")
 	public String atualizar(int id,String nome, String imagem) {
 		try {
 			Fila f = new Fila();
@@ -101,9 +96,9 @@ public class ManterFilasController {
 			f.setId(btnExcluir);
 			deletar(f);
 			return "FilaCadastrada";
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			return "Erro";
+			return "ErroFilaComChamado";
 		}
 	}
 	/**
@@ -143,6 +138,33 @@ public class ManterFilasController {
 			e.printStackTrace();
 			return "Erro";
 		}
+	}
+
+	@Transactional
+	@RequestMapping("/atualizar_fila")
+	public String atualizarFila(Fila fila,Model model, @RequestParam("file") MultipartFile file) throws IOException{
+		try {
+			filaService.atualizarFila(fila);
+			filaService.gravarImagem(servletContext, fila, file);
+			return "FilaCadastrada";
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+			model.addAttribute("erro", e);
+		}
+		return "erro";
+	}
+	
+	@RequestMapping("/mostrar_fila")
+	public String mostrar(Fila fila, Model model) {
+		try {
+			model.addAttribute("fila", filaService.carregar(fila.getId()));
+			return "MostrarFila";
+		} catch (IOException e) {
+			e.printStackTrace();
+			model.addAttribute("erro", e);
+		}
+		return "erro";
 	}
 
 }

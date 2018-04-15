@@ -23,14 +23,14 @@
     <!-- Container Principal -->
     <div id="main" class="container">
         <h3 class="page-header">Cadastrar Fila</h3>
-        <form action="cadastrar_fila" method="post">
+        <form action="cadastrar_fila" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="nome">Nome da fila:</label>
                     <input type="text" name="nome" class="form-control" id="nome">
                     <br>
-                    <label for="img">Imagem:</label>
-                    <input type="text" name="imagem" class="form-control" id="imagem">
+                    <label for="arquivo">Imagem:</label>
+                    <input type="file" name="file" id="arquivo" class="file">
                 </div>
             </div>
             <div id="actions" class="row">
